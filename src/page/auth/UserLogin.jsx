@@ -2,8 +2,11 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../config/config';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '@/service/userSlice';
 
 const UserLogin = () => {
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -33,6 +36,9 @@ const UserLogin = () => {
             
             if (res.code === 200) {
                 toast.success('Login successful!');
+                dispatch(loginSuccess(res.data.user.email));
+                localStorage.setItem('user',res.data.user.email);
+                localStorage.setItem('authToken',res.data.tokens.access.token)
                 navigate('/home')
             }
             else if (res.code === 401) {
@@ -50,7 +56,7 @@ const UserLogin = () => {
     };
     return (
         <>
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="flex min-h-full h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         className="mx-auto h-10 w-auto"
