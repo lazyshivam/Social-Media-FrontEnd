@@ -1,24 +1,100 @@
 import { Button } from '@/components/ui/button';
 import { BASE_URL } from '@/config/config';
-import  { addProfile } from '@/service/userProfileSlice';
-import React, { useEffect,useState } from 'react';
+import { addProfile } from '@/service/userProfileSlice';
+import React, { useEffect, useState } from 'react';
+import { Rings } from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function ProfilePage() {
- 
-const navigate = useNavigate();
+
+  const navigate = useNavigate();
+  const [isPostLoading, setIsPostLoading] = useState(false);
   const userProfile = useSelector((state) => state.profile.userDetails);
+  const [userPost, setUserPost] = useState([]);
+  const isLoading = useSelector((state) => state.profile.isLoading);
+  const getUserPost = async () => {
+    setIsPostLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/post/getUserPost`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+
+      });
+
+      const res = await response.json();
+
+      if (res.code === 200) {
+        toast.success(res.message);
+        // navigate('/home')
+        setUserPost(res.data);
+        console.log(res);
+      }
+      else if (res.code === 401) {
+        toast.error(res.message);
+        navigate('/login');
+      }
+      else if (res.code === 400) {
+        toast.error(res.message);
+      }
+
+
+    } catch (error) {
+      // Handle error
+      console.error('Login error:', error.message);
+      toast.error(error.message || 'Login failed');
+    } finally {
+      setIsPostLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getUserPost();
+  }, []);
+
+
+
+  if (isPostLoading) {
+    return (
+      <div className="flex justify-center  items-center h-screen">
+        <div className="text-center">
+          <Rings
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="rings-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="px-3 py-2">
+      {!userProfile && (
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <p className="text-gray-600 text-lg mb-4">You have not created your profile yet.</p>
+            <Button onClick={() => navigate('/createProfile')} className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              Create Profile
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {userProfile && <div className="px-3 py-2">
         <div className="flex flex-col gap-1 text-center">
           <a className="block mx-auto bg-center bg-no-repeat bg-cover w-20 h-20 rounded-full border border-gray-400 shadow-lg" href="/">
             <img src={userProfile?.profilePicture || 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg'} alt="Profile" className="w-full h-full rounded-full" />
           </a>
-          <p className="font-serif font-semibold">{ userProfile?.username}</p>
-          <span className="text-sm text-gray-400">{ userProfile?.displayName}</span>
+          <p className="font-serif font-semibold">{userProfile?.username}</p>
+          <span className="text-sm text-gray-400">{userProfile?.displayName}</span>
           <span className="text-sm text-gray-400">https://www.youtube.com/watch?v=dQw4w9WgXcQ</span>
         </div>
         <div className="flex justify-center items-center gap-2 my-3">
@@ -36,8 +112,8 @@ const navigate = useNavigate();
           </div>
         </div>
         <div className="flex justify-center gap-2 my-5">
-          <Button onClick={()=>navigate('/editProfile')} className="bg-pink-500 px-10 py-2 rounded-full text-white shadow-lg">Edit Profile</Button>
-          <Button onClick={()=>navigate('/home')} className="bg-white border text-black border-gray-500 px-10 py-2 rounded-full shadow-lg">Go to Home</Button>
+          <Button onClick={() => navigate('/editProfile')} className="bg-pink-500 px-10 py-2 rounded-full text-white shadow-lg">Edit Profile</Button>
+          <Button onClick={() => navigate('/home')} className="bg-white border text-black border-gray-500 px-10 py-2 rounded-full shadow-lg">Go to Home</Button>
         </div>
         <div className="flex justify-between items-center">
           <button className="w-full py-2 border-b-2 border-yellow-400">
@@ -51,19 +127,20 @@ const navigate = useNavigate();
             </svg>
           </button>
         </div>
-        <div className="grid grid-cols-3 gap-2 my-3">
-          <a className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg" href="/" style={{ backgroundImage: "url('https://images.pexels.com/photos/458766/pexels-photo-458766.jpeg')" }}></a>
-          <a className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg" href="/" style={{ backgroundImage: "url('https://images.pexels.com/photos/247287/pexels-photo-247287.jpeg')" }}></a>
-          <a className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg" href="/" style={{ backgroundImage: "url('https://images.pexels.com/photos/6169/woman-hand-girl-professional.jpg')" }}></a>
-          <a className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg" href="/" style={{ backgroundImage: "url('https://images.pexels.com/photos/3851790/pexels-photo-3851790.jpeg')" }}></a>
-          <a className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg" href="/" style={{ backgroundImage: "url('https://images.pexels.com/photos/3852159/pexels-photo-3852159.jpeg')" }}></a>
-          <a className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg" href="/" style={{ backgroundImage: "url('https://images.pexels.com/photos/4491173/pexels-photo-4491173.jpeg')" }}></a>
-          <a className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg" href="/" style={{ backgroundImage: "url('https://images.pexels.com/photos/2294354/pexels-photo-2294354.jpeg')" }}></a>
-          <a className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg" href="/" style={{ backgroundImage: "url('https://images.pexels.com/photos/6019812/pexels-photo-6019812.jpeg')" }}></a>
-          <a className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg" href="/" style={{ backgroundImage: "url('https://images.pexels.com/photos/40751/running-runner-long-distance-fitness-40751.jpeg')" }}></a>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-3">
+          {userPost?.length > 0 ? (
+            userPost.map((item) => (
+              <div  onClick={()=>navigate(`/userPost/${userProfile?._id}`)} className="flex hover:cursor-pointer justify-center" key={item._id}>
+                <img src={item.image} alt="post" className="max-w-full h-auto" />
+              </div>
+            ))
+          ) : (
+            <div className="text-center">No post</div>
+          )}
         </div>
-      </div>
-      
+
+      </div>}
+
     </div>
   );
 }

@@ -1,14 +1,27 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import { BASE_URL } from '../../config/config';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { BASE_URL } from '@/config/config';
+import { useDispatch } from 'react-redux';
+import { updatePost } from '@/service/postSlice';
 
-const CreatePost = () => {
+const EditPost = ({ post, editPopupRef }) => {
+    const {title,image,content,_id} = post ||{};
     const [formData, setFormData] = useState({
-        title: '',
-        image: '',
-        content: ''
+        title: title,
+        image: image,
+        content: content
     });
+    const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate()
@@ -25,11 +38,11 @@ const CreatePost = () => {
         reader.readAsDataURL(file);
     };
 
-    const handleSubmit = async (e) => {
+    const handleUpdateSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await fetch(`${BASE_URL}/post/createPost`, {
+            const response = await fetch(`${BASE_URL}/post/updatePost/${_id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +55,9 @@ const CreatePost = () => {
 
             if (res.code === 200) {
                 toast.success(res.message);
-                navigate('/home')
+                dispatch(updatePost(res.data));
+                // navigate('/home')
+                editPopupRef.current.click();
             }
             else if (res.code === 401) {
                 toast.error(res.message);
@@ -55,28 +70,25 @@ const CreatePost = () => {
 
         } catch (error) {
             // Handle error
-            console.error('Login error:', error.message);
-            toast.error(error.message || 'Login failed');
+            console.error('Update error:', error.message);
+            toast.error(error.message || 'Update failed');
         } finally {
             setIsLoading(false);
         }
     };
-    return (
-        <>
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    {/* <img
-                        className="mx-auto h-10 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
-                    /> */}
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Create Post
-                    </h2>
-                </div>
 
+   
+    return (
+        <Dialog>
+            <DialogTrigger ref={editPopupRef} className='hidden'>
+
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Edit your post</DialogTitle>
+                </DialogHeader>
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" onSubmit={handleSubmit}>
+                    <form className="space-y-6" onSubmit={handleUpdateSubmit}>
                         <div>
                             <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
                                 Title
@@ -88,7 +100,7 @@ const CreatePost = () => {
                                     type="text"
                                     placeholder='Enter your title'
                                     onChange={handleChange}
-                                    // value={formData.username}
+                                    value={formData.title}
                                     autoComplete="title"
                                     required
                                     className="block w-full rounded-md border-0 px-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -139,16 +151,16 @@ const CreatePost = () => {
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-yellow-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
                             >
-                                {isLoading ? 'Please wait..' : 'Create Post'}
+                                {isLoading ? 'Please wait..' : 'Update Post'}
                             </button>
                         </div>
                     </form>
 
 
                 </div>
-            </div>
-        </>
+            </DialogContent>
+        </Dialog>
     )
 }
 
-export default CreatePost
+export default EditPost

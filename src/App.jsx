@@ -9,7 +9,6 @@ import Home from './page/Home';
 import ForgotPassword from './page/auth/ForgotPassword';
 import ResetPassword from './page/auth/ResetPassword';
 import Footer from './page/Footer';
-import Header from './layout/Header';
 import PrivateRoute from './routing/PrivateRoute';
 import { useDispatch, useSelector } from 'react-redux';
 import PageNotFound from './page/PageNotFound';
@@ -21,6 +20,11 @@ import EditProfile from './page/userProfile/EditProfile';
 import { BASE_URL } from './config/config';
 import Layout from './layout/Layout';
 import CreatePost from './page/posts/CreatePost';
+import PostDetails from './page/posts/PostDetails';
+import AuthorProfile from './page/posts/AuthorProfile';
+import UserPost from './page/posts/userPost/UserPost';
+import { fetchPosts } from './service/postSlice';
+import YourStory from './page/userProfile/YourStory';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -31,6 +35,10 @@ function App() {
       dispatch(loginSuccess(user));
     }
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchPosts());
+}, [dispatch]);
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,8 +88,9 @@ function App() {
 
 
   useEffect(() => {
-    GetProfileDetails();
-  }, [isLoggedIn])
+    GetProfileDetails()
+  }, [isLoggedIn]);
+  
 
   return (
     <div className=''>
@@ -109,12 +118,28 @@ function App() {
           <Route path="/createProfile" element={<PrivateRoute />} >
             <Route index element={<CreateProfileForm />} />
           </Route>
-          <Route path="/createPost" element={<PrivateRoute />} >
-            <Route index element={<CreatePost />} />
-          </Route>
           <Route path="/editProfile" element={<PrivateRoute />} >
             <Route index element={<EditProfile />} />
           </Route>
+
+          {/* post related routes here */}
+          <Route path="/createPost" element={<PrivateRoute />} >
+            <Route index element={<CreatePost />} />
+          </Route>
+          <Route path="/post/:postId" element={<PrivateRoute />} >
+            <Route index element={<PostDetails />} />
+          </Route>
+          <Route path="/authorProfile/:id" element={<PrivateRoute />} >
+            <Route index element={<AuthorProfile />} />
+          </Route>
+
+          <Route path="/userPost/:id" element={<PrivateRoute />} >
+            <Route index element={<UserPost />} />
+          </Route>
+          <Route path="/yourStory" element={<PrivateRoute />} >
+            <Route index element={<YourStory />} />
+          </Route>
+         
 
         </Routes>
       </Layout>

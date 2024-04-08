@@ -26,7 +26,7 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/service/userSlice';
 import { toast } from 'react-toastify';
 
@@ -36,6 +36,8 @@ const Header = () => {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+    const userProfile = useSelector((state) => state.profile.userDetails);
+    console.log(userProfile, "log from headers")
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -44,7 +46,7 @@ const Header = () => {
         localStorage.removeItem('user');
         toast.success('Logged out successfully');
         navigate('/login');
-        
+
     }
 
     return (
@@ -74,14 +76,15 @@ const Header = () => {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Avatar>
-                                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                                <AvatarImage src={userProfile?.profilePicture || 'https://github.com/shadcn.png'} alt="@shadcn" />
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
-                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuLabel>{ userProfile?.displayName}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>
+                                
                                 <DropdownMenuItem>
                                     <User className="mr-2 h-4 w-4" />
                                     <Link to='/profile'>Profile</Link>
@@ -104,7 +107,7 @@ const Header = () => {
                             </DropdownMenuItem>
 
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer">
                                 <LogOut className="mr-2 h-4 w-4" />
                                 <span onClick={handleLogout}>Log out</span>
                                 <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

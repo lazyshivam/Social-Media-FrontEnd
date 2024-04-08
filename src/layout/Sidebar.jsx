@@ -1,14 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { CircleFadingPlus, CopyPlus } from 'lucide-react';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
-
+    const userProfile = useSelector((state) => state.profile.userDetails);
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
+    const navigate = useNavigate();
 
     return (
         <div>
@@ -34,7 +36,7 @@ const Sidebar = () => {
 
             <aside
                 id="default-sidebar"
-                className={`z-50 shadow-md shadow-slate-300 overflow-y-auto w-64 h-full bg-slate-300 transition-transform ${
+                className={`z-50 shadow-md shadow-slate-300 scrollbar-default overflow-y-auto w-64 h-full bg-slate-300 transition-transform ${
                     isOpen ? 'translate-x-0' : '-translate-x-full  sm:translate-x-0'
                 }`}
                 aria-label="Sidebar"
@@ -81,6 +83,16 @@ const Sidebar = () => {
                                 <span className="flex-1 ms-3 whitespace-nowrap">Following Users</span>
                             </Link>
                         </li>
+                        {userProfile?.following ? (
+                            userProfile.following.map((user) => (
+                                <li onClick={()=>navigate(`/authorProfile/${user._id}`)} key={user._id} className="flex cursor-pointer items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                    <img src={user.profilePicture} alt={`${user.username}'s profile`} className="w-8 h-8 rounded-full mr-2" />
+                                    <span className="flex-1 whitespace-nowrap">{user.username}</span>
+                                </li>
+                            ))
+                        ) : (
+                            <li className="p-2 text-gray-900 rounded-lg dark:text-white">Loading...</li>
+                        )}
                     </ul>
                 </div>
             </aside>

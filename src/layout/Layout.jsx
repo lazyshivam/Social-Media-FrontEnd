@@ -32,9 +32,9 @@ const Layout = ({ children }) => {
     
     return (
         <>
-            <div className=' flex flex-col h-[100%]'>
+            <div className=' flex  flex-col h-[100%]'>
                 <Header />
-                <div className='flex  flex-1'>
+                <div className='flex scrollbar-default flex-1'>
                     <Sidebar />
                     <div className='m-5 flex-1 w-full'>{children}</div>
                 </div>
