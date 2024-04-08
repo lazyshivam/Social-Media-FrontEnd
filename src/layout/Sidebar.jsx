@@ -83,16 +83,15 @@ const Sidebar = () => {
                                 <span className="flex-1 ms-3 whitespace-nowrap">Following Users</span>
                             </Link>
                         </li>
-                        {userProfile?.following ? (
-                            userProfile.following.map((user) => (
-                                <li onClick={()=>navigate(`/authorProfile/${user._id}`)} key={user._id} className="flex cursor-pointer items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        {userProfile && (
+                            userProfile?.following.map((user) => (
+                                <li onClick={() => navigate(`/authorProfile/${user._id}`)} key={user._id} className="flex cursor-pointer items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                     <img src={user.profilePicture} alt={`${user.username}'s profile`} className="w-8 h-8 rounded-full mr-2" />
                                     <span className="flex-1 whitespace-nowrap">{user.username}</span>
                                 </li>
                             ))
-                        ) : (
-                            <li className="p-2 text-gray-900 rounded-lg dark:text-white">Loading...</li>
                         )}
+                        
                     </ul>
                 </div>
             </aside>

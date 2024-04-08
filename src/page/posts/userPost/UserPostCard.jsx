@@ -102,7 +102,7 @@ const UserPostCard = ({post}) => {
             if (res.code === 200) {
                 toast.success(res.message);
                 dispatch(updateDeletePost(res.data));
-                // navigate('/home')
+                navigate('/profile')
             }
             else if (res.code === 401) {
                 toast.error(res.message);

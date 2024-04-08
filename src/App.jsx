@@ -68,12 +68,12 @@ function App() {
 
       }
       else if (res.code === 401) {
-        toast.error(res.message);
+        // toast.error(res.message);
         navigate('/login')
 
       }
       else if (res.code === 400) {
-        toast.error(res.message);
+        console.log(res.message);
       }
 
 

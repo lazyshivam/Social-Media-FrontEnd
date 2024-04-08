@@ -97,14 +97,15 @@ export const fetchPosts = () => async (dispatch) => {
             dispatch(fetchPostsSuccess(res.data));
             // toast.success(res.message);
         } else if (res.code === 401) {
-            toast.error(res.message);
+        
             dispatch(logout());
             localStorage.removeItem('authToken');
             Navigate('/login');
             // navigate('/login');
             // Handle unauthorized access or redirect to login page
         } else if (res.code === 400) {
-            toast.error(res.message);
+            // toast.error(res.message);
+            console.log(res.message)
             // Handle bad request
         }
     } catch (error) {

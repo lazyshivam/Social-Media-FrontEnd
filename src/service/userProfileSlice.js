@@ -11,6 +11,10 @@ const userProfileSlice = createSlice({
     addProfile: (state, action) => {
       state.userDetails = action.payload; 
     },
+    updateProfileDetails: (state, action) => {
+      const updatedDetails = action.payload;
+      state.userDetails = updatedDetails
+    },
     updateProfile: (state, action) => {
       const postId = action.payload;
       // Check if user details exist and if postLiked array exists
@@ -30,7 +34,7 @@ const userProfileSlice = createSlice({
 });
 
 // Action creators are generated automatically
-export const { addProfile, updateProfile } = userProfileSlice.actions;
+export const { addProfile, updateProfile,updateProfileDetails } = userProfileSlice.actions;
 
 // Export the reducer
 export default userProfileSlice.reducer;

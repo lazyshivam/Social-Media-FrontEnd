@@ -73,20 +73,19 @@ export const fetchComments = () => async (dispatch) => {
             dispatch(fetchCommentsSuccess(res.data));
             // toast.success(res.message);
         } else if (res.code === 401) {
-            toast.error(res.message);
+            // toast.error(res.message);
             dispatch(logout());
             localStorage.removeItem('authToken');
             Navigate('/login');
             // navigate('/login');
             // Handle unauthorized access or redirect to login page
         } else if (res.code === 400) {
-            toast.error(res.message);
-            // Handle bad request
+            console.log(res.message)
         }
     } catch (error) {
         console.error('Fetch posts error:', error.message);
         dispatch(fetchCommentsFailure(error.message || 'Failed to fetch posts'));
-        toast.error('Failed to fetch posts');
+       
     }
 };
 

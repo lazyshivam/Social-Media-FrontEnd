@@ -33,9 +33,11 @@ import { decrementCommentCount, updatePost } from '@/service/postSlice';
 
 
 
-const CommentCard = ({ commentItem }) => {
+const CommentCard = ({userProfile, commentItem }) => {
     const editRef = useRef();
     const navigate = useNavigate();
+    var canDelete = commentItem.author._id===userProfile._id;
+
     const [commentText, setCommentText] = useState(commentItem?.content)
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState();
@@ -166,7 +168,7 @@ const CommentCard = ({ commentItem }) => {
                         </DialogContent>
     
                 </Dialog>
-                <DropdownMenu className="w-24">
+               {canDelete&& <DropdownMenu className="w-24">
 
                     <DropdownMenuTrigger className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                     ><svg
@@ -187,7 +189,7 @@ const CommentCard = ({ commentItem }) => {
                         <DropdownMenuItem onClick={handleDeleteComment} >Delete</DropdownMenuItem>
                         <DropdownMenuItem>Report</DropdownMenuItem>
                     </DropdownMenuContent>
-                </DropdownMenu>
+                </DropdownMenu>}
 
             </footer>
             <p className="text-gray-500 dark:text-gray-400">{commentItem?.content}</p>

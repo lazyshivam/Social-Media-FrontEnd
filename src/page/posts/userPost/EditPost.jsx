@@ -56,7 +56,8 @@ const EditPost = ({ post, editPopupRef }) => {
             if (res.code === 200) {
                 toast.success(res.message);
                 dispatch(updatePost(res.data));
-                // navigate('/home')
+                navigate('/profile')
+                window.location.reload();
                 editPopupRef.current.click();
             }
             else if (res.code === 401) {

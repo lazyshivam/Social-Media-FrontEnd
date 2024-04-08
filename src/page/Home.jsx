@@ -1,6 +1,6 @@
 import { BASE_URL } from '@/config/config';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import PostCard from './posts/PostCard';
 import { useDispatch, useSelector } from 'react-redux';
@@ -50,7 +50,6 @@ const Home = () => {
             const res = await response.json();
 
             if (res.code === 200) {
-                toast.success(res.message);
                 setAllUserStory(res.data);
 
 
@@ -60,14 +59,14 @@ const Home = () => {
                 navigate('/login');
             }
             else if (res.code === 400) {
-                toast.error(res.message);
+               console.log(res.message);
             }
 
 
         } catch (error) {
             // Handle error
             console.error('Update error:', error.message);
-            toast.error(error.message || 'Update failed');
+            // toast.error(error.message || 'Update failed');
         } finally {
             // setIsLoading(false);
         }
@@ -113,8 +112,9 @@ const Home = () => {
         );
       };
     return (
-        <div className="flex max-w-[1250px] flex-col scrollbar-default">
-            <div className="flex-grow">
+        <div className="flex max-w-[1250px] h-screen flex-col scrollbar-default">
+            <div className="flex-grow flex items-center justify-center bg-yellow-100">
+                {allUserStory?.length===0 && <div className='text-center text-neutral-700'>No story to display</div>}
                 <div className="overflow-x-auto flex items-center py-4">
                     {allUserStory?.map(story => (
                         <Story key={story._id} userPic={story.author.profilePicture} username={story.author.username} />
@@ -124,6 +124,8 @@ const Home = () => {
             </div>
 
             <div className="flex-grow scrollbar-hide bg-white">
+                {allPost.length === 0 && <div className='text-center'>No post to display,Please! create a post <br /> <span className='text-red-400 text-xs'>Please create your profile first if you have not created your profile yet. <Link className='text-blue-400 text-sm underline' to='/profile'>Go to your profile
+                </Link></span></div>}
                 {/* Bottom Section - All Posts */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-8 px-4">
                     {allPost?.map((post) => (

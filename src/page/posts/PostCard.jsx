@@ -23,7 +23,7 @@ const PostCard = (props) => {
     const { _id } = props.post;
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+   
     const userProfile = useSelector((state) => state.profile.userDetails);
     const [isLiked, setIsLiked] = useState(false);
 

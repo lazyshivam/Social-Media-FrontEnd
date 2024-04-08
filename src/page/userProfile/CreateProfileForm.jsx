@@ -2,6 +2,8 @@ import { BASE_URL } from '@/config/config';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import {useDispatch} from 'react-redux'
+import { addProfile } from '@/service/userProfileSlice';
 
 const CreateProfileForm = () => {
     const [formData, setFormData] = useState({
@@ -15,6 +17,8 @@ const CreateProfileForm = () => {
     const handleChange = (e) => {
         setFormData({ ...formData,[e.target.name]: e.target.value });
     };
+
+    const dispatch = useDispatch();
 
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
@@ -43,6 +47,7 @@ const CreateProfileForm = () => {
             
             if (res.code === 200) {
                 toast.success(res.message);
+                dispatch(addProfile(res.data));
                 navigate('/profile')
             }
             else if (res.code === 401) {

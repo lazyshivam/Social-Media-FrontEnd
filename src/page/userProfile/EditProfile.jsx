@@ -1,15 +1,17 @@
 import { BASE_URL } from '@/config/config';
+import { updateProfile, updateProfileDetails } from '@/service/userProfileSlice';
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+
 
 const EditProfile = () => {
     const [isLoading, setIsLoading] = useState(false);
     // const [userProfile, setUserProfile] = useState({});
     const navigate = useNavigate();
     const userProfile = useSelector((state) => state.profile.userDetails);
-
+    const dispatch = useDispatch();
     // Initialize form data with userProfile when it's available
     const [formData, setFormData] = useState({
         username: userProfile?.username || '',
@@ -61,6 +63,7 @@ const EditProfile = () => {
 
             if (res.code === 200) {
                 toast.success(res.message);
+                dispatch(updateProfileDetails(res.data));
                 navigate('/profile')
             }
             else if (res.code === 401) {

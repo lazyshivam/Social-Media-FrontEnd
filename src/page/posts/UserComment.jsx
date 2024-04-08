@@ -26,12 +26,14 @@ const UserComment = ({ popupRef, postId }) => {
     // const [post,setPost]=useState({})
     console.log(postId,"Hello How are you")
 
-    // useEffect(() => {
+    useEffect(() => {
        
 
-    //         dispatch(fetchComments());
+        dispatch(fetchComments());
 
-    // }, [])
+    }, []);
+
+    const userProfile = useSelector((state) => state.profile.userDetails);
     const [formData, setFormData] = useState({
         content: ''
     });
@@ -162,7 +164,7 @@ const UserComment = ({ popupRef, postId }) => {
                         {
                             data?.length>0?(data?.slice().reverse().map((commentItem) => (
                                 <div key={commentItem._id}>
-                                    <CommentCard commentItem={commentItem } />
+                                    <CommentCard userProfile={userProfile} commentItem={commentItem } />
                                 </div>
                             ))):(
                         <div className="text-center">

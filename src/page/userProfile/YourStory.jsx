@@ -59,12 +59,8 @@ const YourStory = () => {
 
             if (res.code === 200) {
                 toast.success(res.message);
-                // dispatch(updatePost(res.data));
-                // navigate('/home')
-                const newStory = { ...formData, id: res.data._id }; 
-                setStoryData([...storyData, newStory]); 
-                setFormData({ caption: '', image: null, text: '' });
-                PopupRef.current.click();
+                setStoryData([...storyData, res.data]); 
+                     PopupRef.current.click();
             }
             else if (res.code === 401) {
                 toast.error(res.message);

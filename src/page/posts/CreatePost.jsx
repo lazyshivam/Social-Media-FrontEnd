@@ -2,17 +2,19 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../config/config';
 import { toast } from 'react-toastify';
-
+import {useDispatch,useSelector} from 'react-redux'
 const CreatePost = () => {
+    
     const [formData, setFormData] = useState({
         title: '',
         image: '',
         content: ''
     });
+    
     const [isLoading, setIsLoading] = useState(false);
-
+    const userProfile = useSelector((state) => state.profile.userDetails);
     const navigate = useNavigate()
-
+   console.log(userProfile,"hellow")
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -27,7 +29,13 @@ const CreatePost = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
         setIsLoading(true);
+        if (!userProfile) {
+            toast.warn('Please create a user profile first.');
+            setIsLoading(false);
+            return;
+        }
         try {
             const response = await fetch(`${BASE_URL}/post/createPost`, {
                 method: 'POST',
@@ -56,11 +64,13 @@ const CreatePost = () => {
         } catch (error) {
             // Handle error
             console.error('Login error:', error.message);
-            toast.error(error.message || 'Login failed');
+            // toast.error(error.message );
         } finally {
             setIsLoading(false);
         }
     };
+
+    
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -149,6 +159,6 @@ const CreatePost = () => {
             </div>
         </>
     )
-}
+};
 
 export default CreatePost

@@ -14,11 +14,15 @@ const UserPost = () => {
    
     // const userProfile = useSelector((state) => state.profile.userDetails);
     // const userPost=[]
-    useEffect(() => {
-        dispatch(fetchPosts())
-    },[dispatch])
-    const userPost = useSelector((state) => state.post.postDetails.filter(post=>post?.author._id===id))||[];
-
+    // useEffect(() => {
+    //     dispatch(fetchPosts())
+  // },[dispatch])
+  const [userPost, setUserPost] = useState([]);
+    const allPost = useSelector((state) => state.post.postDetails);
+  useEffect(() => {
+     const filterData= allPost.filter(post => post?.author._id === id);
+    setUserPost(filterData);
+     },[dispatch])
    
     if (userPost.length<=0) {
         return (

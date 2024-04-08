@@ -29,8 +29,7 @@ function ProfilePage() {
       const res = await response.json();
 
       if (res.code === 200) {
-        toast.success(res.message);
-        // navigate('/home')
+       
         setUserPost(res.data);
         console.log(res);
       }
@@ -39,14 +38,14 @@ function ProfilePage() {
         navigate('/login');
       }
       else if (res.code === 400) {
-        toast.error(res.message);
+        console.log(res.message);
       }
 
 
     } catch (error) {
       // Handle error
       console.error('Login error:', error.message);
-      toast.error(error.message || 'Login failed');
+      // toast.error(error.message || 'Login failed');
     } finally {
       setIsPostLoading(false);
     }
@@ -76,7 +75,7 @@ function ProfilePage() {
     );
   }
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl h-screen mx-auto">
       {!userProfile && (
         <div className="flex items-center justify-center h-screen">
           <div className="text-center">
@@ -95,7 +94,7 @@ function ProfilePage() {
           </a>
           <p className="font-serif font-semibold">{userProfile?.username}</p>
           <span className="text-sm text-gray-400">{userProfile?.displayName}</span>
-          <span className="text-sm text-gray-400">https://www.youtube.com/watch?v=dQw4w9WgXcQ</span>
+          <span className="text-sm text-gray-400">{ userProfile?.bio}</span>
         </div>
         <div className="flex justify-center items-center gap-2 my-3">
           <div className="font-semibold text-center mx-4">
