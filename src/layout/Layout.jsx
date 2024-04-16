@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
+import Footer from '@/page/Footer';
 
 const Layout = ({ children }) => {
     const location = useLocation();
@@ -23,6 +24,7 @@ const Layout = ({ children }) => {
                     <Sidebar />
                     <div className='m-5 flex-1 w-full'>{children}</div>
                 </div>
+                <Footer/>
             </div>
         </>
     );

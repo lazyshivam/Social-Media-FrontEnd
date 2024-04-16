@@ -165,7 +165,7 @@ function App() {
         </Routes>
       </Layout>
 
-      <Footer />
+      {/* <Footer /> */}
 
     </div>
   )

@@ -100,7 +100,7 @@ const UserComment = ({ popupRef, postId }) => {
     };
 
 
-
+  console.log(commentsData);
     return (
         <Drawer>
             <DrawerTrigger className="hidden" onClick={OpenPopup} ref={popupRef}>Show Comment</DrawerTrigger>
@@ -110,7 +110,7 @@ const UserComment = ({ popupRef, postId }) => {
                     <div className="max-w-2xl mx-auto px-4">
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
-                                Discussion (20)
+                                Discussion ({data.length})
                             </h2>
                             <DrawerTrigger
                                 onClick={OpenPopup}

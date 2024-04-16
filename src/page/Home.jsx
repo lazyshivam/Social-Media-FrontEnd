@@ -123,7 +123,7 @@ const Home = () => {
                 
             </div>
 
-            <div className="flex-grow scrollbar-hide bg-white">
+            <div className="flex-grow scrollbar-hide overflow-y-auto bg-white">
                 {allPost.length === 0 && <div className='text-center'>No post to display,Please! create a post <br /> <span className='text-red-400 text-xs'>Please create your profile first if you have not created your profile yet. <Link className='text-blue-400 text-sm underline' to='/profile'>Go to your profile
                 </Link></span></div>}
                 {/* Bottom Section - All Posts */}
