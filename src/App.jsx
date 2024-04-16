@@ -25,6 +25,7 @@ import AuthorProfile from './page/posts/AuthorProfile';
 import UserPost from './page/posts/userPost/UserPost';
 import { fetchPosts } from './service/postSlice';
 import YourStory from './page/userProfile/YourStory';
+import { Rings } from 'react-loader-spinner';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -64,6 +65,7 @@ function App() {
 
       if (res.code === 200) {
         // setUserProfile(res.data);
+        navigate('/home');
         dispatch(addProfile(res.data));
 
       }
@@ -91,6 +93,25 @@ function App() {
     GetProfileDetails()
   }, [isLoggedIn]);
   
+  if (isLoading) {
+    return (
+        <div className="flex justify-center  items-center h-screen">
+            <div className="text-center">
+                <Rings
+                    visible={true}
+                    height="80"
+                    width="80"
+                    color="#4fa94d"
+                    ariaLabel="rings-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                />
+            </div>
+        </div>
+    );
+
+
+}
 
   return (
     <div className=''>

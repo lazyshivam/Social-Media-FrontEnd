@@ -1,1 +1,1 @@
-export const BASE_URL ='http://localhost:3085/v1'
+export const BASE_URL ='https://social-media-backend-usw9.onrender.com/v1'

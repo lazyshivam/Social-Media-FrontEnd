@@ -14,21 +14,6 @@ const Layout = ({ children }) => {
     if (isAuthPage) {
         return <>{children}</>;
     }
-    // .layout {
-    //     display: flex;
-    //     flex-direction: column;
-    //     height: 100%;
-    // }
-    
-    // .content {
-    //     display: flex;
-    //     flex: 1;
-    // }
-    
-    // .main-content {
-    //     flex: 1;
-    //     padding: 20px; /* Adjust as needed */
-    // }
     
     return (
         <>
